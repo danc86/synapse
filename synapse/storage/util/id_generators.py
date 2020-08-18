@@ -146,7 +146,7 @@ class StreamIdGenerator(object):
 
         return manager()
 
-    def get_current_token(self):
+    def get_current_token(self, instance_name=None):
         """Returns the maximum stream id such that all stream ids less than or
         equal to it have been successfully persisted.
 
@@ -352,7 +352,7 @@ class MultiWriterIdGenerator:
 
         # Currently we don't support this operation, as it's not obvious how to
         # condense the stream positions of multiple writers into a single int.
-        raise NotImplementedError()
+        return self.get_persisted_upto_position()
 
     def get_current_token_for_writer(self, instance_name: str) -> int:
         """Returns the position of the given writer.
