@@ -232,7 +232,7 @@ class MultiWriterIdGenerator:
         # that allows us to skip forwards when there are gapless runs of
         # positions.
         self._persisted_upto_position = (
-            min(self._current_positions.values()) if self._current_positions else 0
+            min(self._current_positions.values()) if self._current_positions else 1
         )
         self._known_persisted_positions = []  # type: List[int]
 
