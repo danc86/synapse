@@ -1022,35 +1022,35 @@ class DatabasePool(object):
         return txn.execute_batch(sql, args)
 
     @overload
-    def simple_select_one(
+    async def simple_select_one(
         self,
         table: str,
         keyvalues: Dict[str, Any],
         retcols: Iterable[str],
         allow_none: Literal[False] = False,
         desc: str = "simple_select_one",
-    ) -> Awaitable[Dict[str, Any]]:
+    ) -> Dict[str, Any]:
         ...
 
     @overload
-    def simple_select_one(
+    async def simple_select_one(
         self,
         table: str,
         keyvalues: Dict[str, Any],
         retcols: Iterable[str],
         allow_none: Literal[True] = True,
         desc: str = "simple_select_one",
-    ) -> Awaitable[Optional[Dict[str, Any]]]:
+    ) -> Optional[Dict[str, Any]]:
         ...
 
-    def simple_select_one(
+    async def simple_select_one(
         self,
         table: str,
         keyvalues: Dict[str, Any],
         retcols: Iterable[str],
         allow_none: bool = False,
         desc: str = "simple_select_one",
-    ) -> Awaitable[Optional[Dict[str, Any]]]:
+    ) -> Optional[Dict[str, Any]]:
         """Executes a SELECT query on the named table, which is expected to
         return a single row, returning multiple columns from it.
 
@@ -1061,18 +1061,18 @@ class DatabasePool(object):
             allow_none: If true, return None instead of failing if the SELECT
                 statement returns no rows
         """
-        return self.runInteraction(
+        return await self.runInteraction(
             desc, self.simple_select_one_txn, table, keyvalues, retcols, allow_none
         )
 
-    def simple_select_one_onecol(
+    async def simple_select_one_onecol(
         self,
         table: str,
         keyvalues: Dict[str, Any],
         retcol: Iterable[str],
         allow_none: bool = False,
         desc: str = "simple_select_one_onecol",
-    ) -> Awaitable[Optional[Any]]:
+    ) -> Optional[Any]:
         """Executes a SELECT query on the named table, which is expected to
         return a single row, returning a single column from it.
 
@@ -1084,7 +1084,7 @@ class DatabasePool(object):
                 statement returns no rows
             desc: description of the transaction, for logging and metrics
         """
-        return self.runInteraction(
+        return await self.runInteraction(
             desc,
             self.simple_select_one_onecol_txn,
             table,
